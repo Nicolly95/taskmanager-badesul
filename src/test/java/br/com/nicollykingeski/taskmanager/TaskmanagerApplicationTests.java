@@ -71,6 +71,19 @@ class TaskmanagerApplicationTests {
 			.jsonPath("$[0].descricao").isEqualTo(todo.getDescricao());	
 	}
 
+	@Test
+	//previne erro 500 se o banco estiver limpo
+	void testListTodoEmpty() {
+		webTestClient
+			.get()
+			.uri("/todos")
+			.exchange()
+			.expectStatus().isOk()
+			.expectBody()
+			.jsonPath("$").isArray()
+			.jsonPath("$.length()").isEqualTo(0);
+	}
+
 }
 
 
