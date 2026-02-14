@@ -40,8 +40,12 @@ public class TodoService {
     //cria lista do tipo Todo para DELETAR uma task
     //deleta somente o item do identificador unico desejado
     public List<Todo> delete(Long id) {
-        todoRepository.deleteById(id);
-        return list();
+        if(todoRepository.existsById(id)) {
+            todoRepository.deleteById(id);
+            return list();
+        }        
+
+        throw new RuntimeException("Tarefa não encontrada");
     }
     
 }

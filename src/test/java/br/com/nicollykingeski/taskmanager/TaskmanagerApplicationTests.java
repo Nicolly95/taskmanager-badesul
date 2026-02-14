@@ -178,6 +178,17 @@ class TaskmanagerApplicationTests {
 			.jsonPath("$.length()").isEqualTo(0);
 	}
 
+	@Test
+	void testDeleteTodoFailure() {
+		Long idInexistente = 9999L;
+
+		webTestClient
+			.delete()
+			.uri("/todos/{id}", idInexistente)
+			.exchange()
+			.expectStatus().is5xxServerError();
+	}
+
 }
 
 
