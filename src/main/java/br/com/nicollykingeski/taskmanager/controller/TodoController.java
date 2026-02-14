@@ -4,6 +4,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import br.com.nicollykingeski.taskmanager.entity.Todo;
 import br.com.nicollykingeski.taskmanager.service.TodoService;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+
+
 
 @RestController
 @RequestMapping("/todos")
@@ -16,19 +24,23 @@ public class TodoController {
         this.todoService = todoService;
     }
 
-    public List<Todo> create(Todo todo) {
+    @PostMapping    
+    public List<Todo> create(@RequestBody Todo todo) {
         return todoService.create(todo);
     }
 
+    @GetMapping
     public List<Todo> list() {
         return todoService.list();
     }
 
-    public List<Todo> update(Todo todo) {
+    @PutMapping
+    public List<Todo> update(@RequestBody Todo todo) {
         return todoService.update(todo);
     }
 
-    public List<Todo> delete(Long id) {
+    @DeleteMapping("{id}")
+    public List<Todo> delete(@PathVariable("id") Long id) {
         return todoService.delete(id);
     }
 
