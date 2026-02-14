@@ -151,6 +151,33 @@ class TaskmanagerApplicationTests {
 
 	}
 
+	@Test
+	void testDeleteTodoSuccess() {
+		var todo = new Todo("todo deletation", "description", false,1);
+
+		//cria a tarefa e salva o ID que será deletado
+		var response = webTestClient
+			.post()
+			.uri("/todos")
+			.bodyValue(todo)
+			.exchange()
+			.expectStatus().isOk()
+			.expectBodyList(Todo.class)
+			.returnResult()
+			.getResponseBody();
+		Long idGerado = response.get(0).getId();
+
+		//deleta a tarefa do 'idGerado'
+		webTestClient
+			.delete()
+			.uri("/todos/{id}", idGerado)	//passa o ID para URL via props
+			.exchange()
+			.expectStatus().isOk()
+			.expectBody()
+			.jsonPath("$").isArray()
+			.jsonPath("$.length()").isEqualTo(0);
+	}
+
 }
 
 
