@@ -24,7 +24,7 @@ public class TodoService {
     public List<Todo> list() {
         Sort sort = Sort.by("prioridade").descending().and(
             Sort.by("nome").ascending());
-        return todoRepository.findAll();                                               
+        return todoRepository.findAll(sort);                                               
     }
 
     //cria lista do tipo Todo para ATUALIZAR uma task
@@ -36,7 +36,7 @@ public class TodoService {
     //cria lista do tipo Todo para DELETAR uma task
     //deleta somente o item do identificador unico desejado
     public List<Todo> delete(Long id) {
-        todoRepository.deleteById(id);;
+        todoRepository.deleteById(id);
         return list();
     }
     

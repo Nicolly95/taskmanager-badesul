@@ -16,10 +16,14 @@ public class Todo {
     private Long id;
     @NotBlank
     private String nome;
+
     @NotBlank
     private String descricao;
     private boolean realizado;
     private int prioridade;
+
+    public Todo() {
+    }
 
     public Todo(String nome, String descricao, boolean realizado, int prioridade) {
         this.nome = nome;
