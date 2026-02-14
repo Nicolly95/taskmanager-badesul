@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import br.com.nicollykingeski.taskmanager.entity.Todo;
 import br.com.nicollykingeski.taskmanager.service.TodoService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,7 +26,7 @@ public class TodoController {
     }
 
     @PostMapping    
-    public List<Todo> create(@RequestBody Todo todo) {
+    public List<Todo> create(@RequestBody @Valid Todo todo) {
         return todoService.create(todo);
     }
 

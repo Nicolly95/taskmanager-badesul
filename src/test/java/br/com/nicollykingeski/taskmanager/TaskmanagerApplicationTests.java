@@ -35,7 +35,15 @@ class TaskmanagerApplicationTests {
 	}
 
 	@Test
+	//Uma Todo inválida seria com um nome vazio ou descrição vazia
 	void testCreateTodoFailure() {
+		webTestClient
+			.post()
+			.uri("/todos")
+			.bodyValue(
+				new Todo("", "", false, 0)
+			).exchange()
+			.expectStatus().isBadRequest();
 	}
 
 }

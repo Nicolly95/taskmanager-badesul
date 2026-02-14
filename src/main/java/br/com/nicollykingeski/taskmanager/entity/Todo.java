@@ -5,6 +5,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
 
 //ANOTAÇÕES JPA: (mapeia classes Java para as tabelas do BD através do Hibernate)
 @Entity 
@@ -13,7 +14,9 @@ public class Todo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)     //Ids gerados de forma sequenciais no BD
     private Long id;
+    @NotBlank
     private String nome;
+    @NotBlank
     private String descricao;
     private boolean realizado;
     private int prioridade;
