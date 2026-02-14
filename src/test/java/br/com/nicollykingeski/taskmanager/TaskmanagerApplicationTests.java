@@ -19,6 +19,7 @@ class TaskmanagerApplicationTests {
 	void testCreateTodoSuccess() {
 		var todo = new Todo("todo 1", "description todo 1", false, 1);
 
+		//criação de lista com metodo .post()
 		webTestClient
 			.post()
 			.uri("/todos")
@@ -36,6 +37,7 @@ class TaskmanagerApplicationTests {
 
 	@Test
 	//Uma Todo inválida seria com um nome vazio ou descrição vazia
+	//tentativa de criação de lista com metodo .post()
 	void testCreateTodoFailure() {
 		webTestClient
 			.post()
@@ -50,7 +52,7 @@ class TaskmanagerApplicationTests {
 	void testListTodoSuccess() {
 		var todo = new Todo("todo 1", "description todo 1", false, 1);
 
-		//garante que há dados no BD
+		//garante que há dados no BD 
 		webTestClient
 			.post()
 			.uri("/todos")
@@ -82,6 +84,43 @@ class TaskmanagerApplicationTests {
 			.expectBody()
 			.jsonPath("$").isArray()
 			.jsonPath("$.length()").isEqualTo(0);
+	}
+
+	@Test
+	void testUpdateTodoSuccess() {
+		var todo = new Todo("todo 1", "description todo 1", false, 1);
+
+		//armazena o resultado da postagem em 'response'
+		var response = webTestClient
+			.post()
+			.uri("/todos")
+			.bodyValue(todo)
+			.exchange()
+			.expectStatus().isOk()
+			.expectBodyList(Todo.class)						//o serviço retorna uma lista no create
+			.returnResult()
+			.getResponseBody();
+
+		//salva ID do objeto que acabou de ser criado
+		Long idGerado = response.get(0).getId();
+
+		//cria um novo Todo com os dados atualizados e o ID correto
+		var todoAtualizado = new Todo("new todo 1", "todo 1 new description", true, 2);
+		todoAtualizado.setId(idGerado); //atribui id gerado ao 'todoAtualizado'
+
+		//agora atualiza os dados com .put()
+		webTestClient
+			.put()
+			.uri("/todos")
+			.bodyValue(todoAtualizado)
+			.exchange()
+			.expectStatus().isOk()
+			.expectBody()
+			.jsonPath("$").isArray()
+			.jsonPath("$[0].id").isEqualTo(idGerado)
+			.jsonPath("$[0].nome").isEqualTo(todoAtualizado.getNome())
+			.jsonPath("$[0].realizado").isEqualTo(true)
+			.jsonPath("$[0].prioridade").isEqualTo(2);		
 	}
 
 }
