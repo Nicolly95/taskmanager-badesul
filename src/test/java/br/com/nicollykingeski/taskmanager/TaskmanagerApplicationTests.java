@@ -136,6 +136,21 @@ class TaskmanagerApplicationTests {
 			.expectStatus().isBadRequest();	
 	}	
 
+	@Test
+	void testUpdateTodoIdNotFound() {
+		var todoInexistente = new Todo("nome", "description", false, 1);
+		todoInexistente.setId(9999L);
+
+		//tenta atualizar enviando um Todo com ID inexistente
+		webTestClient
+			.put()
+			.uri("/todos")
+			.bodyValue(todoInexistente)
+			.exchange()
+			.expectStatus().is5xxServerError();
+
+	}
+
 }
 
 
