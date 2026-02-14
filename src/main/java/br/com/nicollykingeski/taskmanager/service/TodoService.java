@@ -29,8 +29,12 @@ public class TodoService {
 
     //cria lista do tipo Todo para ATUALIZAR uma task
     public List<Todo> update(Todo todo) {
-        todoRepository.save(todo);
-        return list();
+        if(todo.getId() != null && todoRepository.existsById(todo.getId())) {
+            todoRepository.save(todo);
+            return list();
+        }
+
+        throw new RuntimeException("Tarefa não encontrada ou ID inválido.");        
     }
 
     //cria lista do tipo Todo para DELETAR uma task

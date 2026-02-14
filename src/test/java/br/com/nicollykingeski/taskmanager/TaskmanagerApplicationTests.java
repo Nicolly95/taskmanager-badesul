@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import br.com.nicollykingeski.taskmanager.entity.Todo;
 
@@ -122,6 +123,18 @@ class TaskmanagerApplicationTests {
 			.jsonPath("$[0].realizado").isEqualTo(true)
 			.jsonPath("$[0].prioridade").isEqualTo(2);		
 	}
+
+	@Test
+	void testUpdateTodoFailure() {
+		//tenta atualizar enviando um Todo com campos vazios
+		webTestClient
+			.put()
+			.uri("/todos")
+			.bodyValue(
+				new Todo("", "", false, 0)
+			).exchange()
+			.expectStatus().isBadRequest();	
+	}	
 
 }
 
