@@ -18,29 +18,34 @@ import org.springframework.web.bind.annotation.PathVariable;
 @RequestMapping("/todos")
 //TERÁ TODAS AS OPERAÇÕES CRIADAS NO SERVICE!
 public class TodoController {
-    private TodoService todoService;
+    private final TodoService todoService;
     
     
     public TodoController(TodoService todoService) {
         this.todoService = todoService;
     }
 
+    //Cria nova tarefa e retornar lista atualizada
     @PostMapping    
-    public Todo create(@RequestBody @Valid Todo todo) {
-        return todoService.create(todo);
+    public List<Todo> create(@RequestBody @Valid Todo todo) {
+        todoService.create(todo);
+        return todoService.list();
     }
 
+    //Lista todas as tarefas atuais
     @GetMapping
     public List<Todo> list() {
         return todoService.list();
     }
 
+    //Atualiza tarefa existente e retorna lista atualizada
     @PutMapping
     public List<Todo> update(@RequestBody @Valid Todo todo) {
         return todoService.update(todo);
     }
 
-    @DeleteMapping("{id}")
+    //Deleta uma tarefa a partir de um ID e retorna a lista atualizada
+    @DeleteMapping("/{id}")
     public List<Todo> delete(@PathVariable("id") Long id) {
         return todoService.delete(id);
     }
