@@ -95,7 +95,13 @@
                             {{ prioridadeMap[todo.prioridade] }}
                         </span>
                         
-                        
+                        <button 
+                            @click="remove(todo.id)"
+                            class="text-gray-400 hover:text-gray-800 hover:font-bold transition-colors text-lg p-1"
+                            title="Remover tarefa"
+                        >
+                            ✕
+                        </button>
                     </div>
                 </li>
             </ul>
@@ -181,7 +187,18 @@
                     2: 'bg-red-50'                                      //prioridade alta amarelo claro
                 }
                 return classes[todo.prioridade] || 'bg-gray-50'
-            }                        
+            },
+            async remove(id) {
+                try {
+                    await fetch(`/todos/${id}`, {
+                        method: 'DELETE'
+                    })
+
+                    this.todos = this.todos.filter(todo => todo.id !== id)
+                } catch (error) {
+                    console.error("Erro ao deletar:", error)
+                }
+            }                         
         }
     }).mount('#app')
     </script>
