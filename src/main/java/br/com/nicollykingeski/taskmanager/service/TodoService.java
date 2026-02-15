@@ -14,9 +14,8 @@ public class TodoService {
     }
 
     //cria lista do tipo Todo para CRIAR nova task
-    public List<Todo> create(Todo todo) {
-        todoRepository.save(todo);
-        return list();
+    public Todo create(Todo todo) {
+        return todoRepository.save(todo);
     }
 
     //cria lista do tipo Todo para CONSULTAR tasks existentes
