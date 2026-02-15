@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <title>TaskManager - Badesul</title>
-    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>    
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/styles.css">
 </head>
 
 <body class="min-h-screen bg-gray-100 flex flex-col items-center justify-center ">
 
-    <div class="flex flex-col w-full max-w-4xl items-start mt-10 mb-10 ">
+    <div class="flex flex-col w-full max-w-4xl items-start mt-8 mb-8 ">
         <h1> <span class="text-4xl font-bold text-green-800"> BADESUL </span> 
             <span class="italic font-semibold text-3xl text-gray-800">TaskManager</span></h1>
         <h3 class="font-semibold text-xl text-gray-900"> SISTEMA DE GERENCIAMENTO DE TAREFAS </h3>
@@ -18,7 +19,7 @@
 
     <div id="app" class="w-full flex-1 max-w-4xl mb-2 items-start bg-white p-6 rounded-xl shadow-lg">
 
-        <h2 class="text-2xl font-bold text-center mb-6 text-gray-900">
+        <h2 class="text-xl font-bold text-center mb-4 -mt-2 text-gray-800">
             Minhas Tarefas
         </h2>
 
@@ -59,7 +60,25 @@
                     placeholder="Descrição"
                 >                
                 
-            </div>            
+            </div>      
+            
+            <!-- A Listagem das tarefas -->
+            <ul class="space-y-2 max-h-[290px] overflow-y-auto task-list">
+                <li 
+                    v-for="todo in todos" 
+                    :key="todo.id"
+                    class="flex justify-between items-center bg-gray-50 p-3 rounded"
+                >
+                    <div class="flex items-center gap-2">
+                        <div :class="{'line-through text-gray-400': todo.realizado}">
+                            <span class="text-black/90 font-semibold">{{ todo.nome }}</span>: 
+                            <span class="text-black/80 text-sm">{{ todo.descricao }}</span> -
+                            <span class="text-sm text-gray-500">(Prioridade: {{ prioridadeMap[todo.prioridade] }})</span>
+                        </div>
+                    </div>
+
+                </li>
+            </ul>
 
         </div>
 
@@ -71,9 +90,15 @@
     createApp({
         data() {
             return {
-                newTodo: { nome: "", descricao: "", prioridade: "" },
-                isSubmitting: false
+                todos: [],
+                newTodo: { nome: "", descricao: "", prioridade: "", realizado: false },
+                loading: true,
+                isSubmitting: false,
+                prioridadeMap: ["Baixa", "Média", "Alta"]
             }
+        },        
+        mounted() {
+            this.fetchTodos()
         },
         methods: {
             async addTodo() {
@@ -82,22 +107,37 @@
                 this.isSubmitting = true
 
                 try {
-                    const response = await fetch('/todos', {
+                    await fetch('/todos', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(this.newTodo)
-                    })
+                        body: JSON.stringify({ ...this.newTodo, realizado: false })
+                    });
+
+                    //recupera a resposta da inclusao de nova tarefa no backend
+                    const response = await fetch('/todos');
+
+                    //atualiza a lista de tarefas com a nova tarefa adicionada
+                    this.todos = await response.json();
 
                     //limpa os inputs do formulário
-                    this.newTodo = { nome: "", descricao: "", prioridade: "" }
+                    this.newTodo = { nome: "", descricao: "", prioridade: "", realizado: false }
 
                 } catch (error) {
                     console.error("Erro ao salvar:", error)
                 } finally {
                     this.isSubmitting = false
                 }
-            }
-            
+            },
+            async fetchTodos() {
+                try {
+                    const response = await fetch('/todos')
+                    this.todos = await response.json()
+                } catch (error) {
+                    console.error("Erro ao conectar com a API:", error)
+                } finally {
+                    this.loading = false
+                }
+            }            
         }
     }).mount('#app')
     </script>
