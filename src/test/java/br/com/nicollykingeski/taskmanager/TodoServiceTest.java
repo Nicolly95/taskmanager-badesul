@@ -1,6 +1,7 @@
 package br.com.nicollykingeski.taskmanager;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -32,7 +33,7 @@ class TodoServiceTest {
         when(todoRepository.save(todo)).thenReturn(todo);
         when(todoRepository.findAll(any(Sort.class))).thenReturn(List.of(todo));
 
-        List<Todo> result = todoService.create(todo);
+        Todo result = todoService.create(todo);
 
         assertNotNull(result);
         verify(todoRepository).save(todo);
