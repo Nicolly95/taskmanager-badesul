@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>TaskManager - Badesul</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="min-h-screen bg-gray-100 flex flex-col items-center justify-center ">
+
+    <div class="flex flex-col w-full max-w-4xl items-start mt-10 mb-10 ">
+        <h1> <span class="text-4xl font-bold text-green-800"> BADESUL </span> 
+            <span class="italic font-semibold text-3xl text-gray-800">TaskManager</span></h1>
+        <h3 class="font-semibold text-xl text-gray-900"> SISTEMA DE GERENCIAMENTO DE TAREFAS </h3>
+    </div>
+    
+
+    <div id="app" class="w-full flex-1 max-w-4xl mb-2 items-start bg-white p-6 rounded-xl shadow-lg">
+
+        <h2 class="text-2xl font-bold text-center mb-6 text-gray-900">
+            Minhas Tarefas
+        </h2>
+
+        <div v-if="loading" class="text-center text-gray-500">
+            Buscando dados...
+        </div>
+
+        <div v-else>
+
+            <div class="flex gap-2 mb-4">
+                <input 
+                    v-model="newTodo.name"
+                    class="flex-1 border rounded px-3 py-2 focus:outline-none focus:ring-0"
+                    placeholder="Nova tarefa"
+                >
+                <button 
+                    @click="addTodo"
+                    :disabled="isSubmitting"
+                    class="bg-green-800 text-white px-4 py-2 rounded hover:bg-green-900 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                    {{ isSubmitting ? 'Salvando...' : 'Adicionar' }}
+                </button>
+            </div>
+
+            <ul class="space-y-2">
+                <li 
+                    v-for="todo in todos" 
+                    :key="todo.id"
+                    class="flex justify-between items-center bg-gray-50 p-3 rounded"
+                >
+                    <span>{{ todo.name }}</span>
+                    <button 
+                        @click="remove(todo.id)"
+                        class="text-red-500 hover:text-red-700"
+                    >
+                        ✕
+                    </button>
+                </li>
+            </ul>
+
+        </div>
+
+    </div>
+
+    <script>
+    const { createApp } = Vue
+
+    createApp({
+        data() {
+            return {
+                todos: [],
+                newTodo: { name: "" },
+                loading: true,
+                isSubmitting: false
+            }
+        },
+        mounted() {
+            this.fetchTodos()
+        },
+        methods: {
+            async fetchTodos() {
+                try {
+                    const response = await fetch('/todos')
+                    this.todos = await response.json()
+                } catch (error) {
+                    console.error("Erro ao conectar com a API:", error)
+                } finally {
+                    this.loading = false
+                }
+            },
+            async addTodo() {
+                if (!this.newTodo.name || this.isSubmitting) return
+
+                this.isSubmitting = true
+
+                try {
+                    const response = await fetch('/todos', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(this.newTodo)
+                    })
+
+                    this.todos = await response.json()
+                    this.newTodo.name = ""
+                } finally {
+                    this.isSubmitting = false
+                }
+            },
+            async remove(id) {
+                const response = await fetch(`/todos/${id}`, {
+                    method: 'DELETE'
+                })
+
+                this.todos = await response.json()
+            }
+        }
+    }).mount('#app')
+    </script>
+
+</body>
+<footer class="w-full border-t border-gray-300 text-start text-xs text-gray-400 px-2 py-2 ">
+    <div class="pl-2">© 2026 Badesul - Sistema Interno</div>
+</footer>
+
+</html>
