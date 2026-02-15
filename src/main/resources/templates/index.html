@@ -24,7 +24,7 @@
         </h2>
 
         <div v-if="loading" class="text-center text-gray-500">
-            Buscando dados...
+            Carregando tarefas...
         </div>
 
         <div v-else>
@@ -67,24 +67,36 @@
                 <li 
                     v-for="todo in todos" 
                     :key="todo.id"
-                    class="flex justify-between items-center bg-gray-50 p-3 rounded"
+                    :class="[
+                        getPriorityClass(todo), 
+                        'flex justify-between items-center p-3 rounded shadow-sm transition-all'
+                    ]"
                 >
-                    <div class="flex items-center gap-2">
-                        <input type="checkbox" v-model="todo.realizado" @change="toggleRealizado(todo)"
-                            class="w-5 h-5 accent-green-800">
-                        <div :class="todo.realizado ? 'line-through text-gray-400' : 'text-black/90'">
-                            <span :class="todo.realizado ? 'text-gray-400' : 'text-black/90'" class="font-semibold">
-                                {{ todo.nome }}
-                            </span> : 
-                            <span :class="todo.realizado ? 'text-gray-400' : 'text-black/80'" class="text-sm">
-                                {{ todo.descricao }}
-                            </span> -
-                            <span :class="todo.realizado ? 'text-gray-400' : 'text-gray-500'" class="text-sm">
-                                (Prioridade: {{ prioridadeMap[todo.prioridade] }})
-                            </span>
+                    <div class="flex items-center gap-3 min-w-0 flex-1 ">
+                        <input 
+                            type="checkbox" 
+                            v-model="todo.realizado" 
+                            @change="toggleRealizado(todo)" 
+                            class="w-5 h-5 accent-green-800 flex-shrink-0"
+                        >
+                        <div class="min-w-0 flex-1 break-words" :class="todo.realizado ? 'line-through text-gray-400' : 'text-black/90'">
+                            <span class="font-semibold block sm:inline">{{ todo.nome }}</span>
+                            <span class="text-sm opacity-80"> — {{ todo.descricao }}</span>
                         </div>
                     </div>
 
+                    <div class="flex items-center gap-4 ml-4 flex-shrink-0">
+                        <span                             
+                            class="text-xs font-medium px-3 py-1 rounded-full"
+                            :class="todo.realizado 
+                                    ? 'bg-gray-400 text-white' 
+                                    : 'bg-gray-200 text-gray-600'"
+                        >
+                            {{ prioridadeMap[todo.prioridade] }}
+                        </span>
+                        
+                        
+                    </div>
                 </li>
             </ul>
 
@@ -106,7 +118,7 @@
             }
         },        
         mounted() {
-            this.fetchTodos()
+            this.fetchTodos()                       //chama a requisição para listar as tarefas na tela
         },
         methods: {
             async addTodo() {
@@ -157,7 +169,19 @@
                 } catch (error) {
                     console.error("Erro ao atualizar:", error)
                 }
-            }            
+            },
+            getPriorityClass(todo) {
+                
+                if (todo.realizado) {
+                    return 'bg-gray-200 opacity-60'; 
+                }
+                const classes = {
+                    0: 'bg-blue-50',                                      //prioridade baixa azul claro
+                    1: 'bg-yellow-50',                                 //prioridade media amarelo claro
+                    2: 'bg-red-50'                                      //prioridade alta amarelo claro
+                }
+                return classes[todo.prioridade] || 'bg-gray-50'
+            }                        
         }
     }).mount('#app')
     </script>
