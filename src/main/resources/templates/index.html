@@ -70,10 +70,18 @@
                     class="flex justify-between items-center bg-gray-50 p-3 rounded"
                 >
                     <div class="flex items-center gap-2">
-                        <div :class="{'line-through text-gray-400': todo.realizado}">
-                            <span class="text-black/90 font-semibold">{{ todo.nome }}</span>: 
-                            <span class="text-black/80 text-sm">{{ todo.descricao }}</span> -
-                            <span class="text-sm text-gray-500">(Prioridade: {{ prioridadeMap[todo.prioridade] }})</span>
+                        <input type="checkbox" v-model="todo.realizado" @change="toggleRealizado(todo)"
+                            class="w-5 h-5 accent-green-800">
+                        <div :class="todo.realizado ? 'line-through text-gray-400' : 'text-black/90'">
+                            <span :class="todo.realizado ? 'text-gray-400' : 'text-black/90'" class="font-semibold">
+                                {{ todo.nome }}
+                            </span> : 
+                            <span :class="todo.realizado ? 'text-gray-400' : 'text-black/80'" class="text-sm">
+                                {{ todo.descricao }}
+                            </span> -
+                            <span :class="todo.realizado ? 'text-gray-400' : 'text-gray-500'" class="text-sm">
+                                (Prioridade: {{ prioridadeMap[todo.prioridade] }})
+                            </span>
                         </div>
                     </div>
 
@@ -136,6 +144,18 @@
                     console.error("Erro ao conectar com a API:", error)
                 } finally {
                     this.loading = false
+                }
+            },
+            async toggleRealizado(todo) {
+                try {
+                    const response = await fetch('/todos', {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(todo)
+                    })
+                    this.todos = await response.json()
+                } catch (error) {
+                    console.error("Erro ao atualizar:", error)
                 }
             }            
         }
