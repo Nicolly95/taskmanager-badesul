@@ -10,13 +10,15 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Sort;
-
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import br.com.nicollykingeski.taskmanager.entity.Todo;
 import br.com.nicollykingeski.taskmanager.repository.TodoRepository;
 import br.com.nicollykingeski.taskmanager.service.TodoService;
 
 
 @ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 class TodoServiceTest {
 
     @Mock

@@ -1,5 +1,6 @@
 //CONFIGURAÇÃO DA ENTIDADE TODO
 package br.com.nicollykingeski.taskmanager.entity;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -18,6 +19,7 @@ public class Todo {
     private String nome;
 
     @NotBlank
+    @Column(length = 1000)
     private String descricao;
     private boolean realizado;
     private int prioridade;
