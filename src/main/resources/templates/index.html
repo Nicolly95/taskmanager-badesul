@@ -81,7 +81,7 @@
                         >
                         <div class="min-w-0 flex-1 break-words" :class="todo.realizado ? 'line-through text-gray-400' : 'text-black/90'">
                             <span class="font-semibold block sm:inline">{{ todo.nome }}</span>
-                            <span class="text-sm opacity-80"> — {{ todo.descricao }}</span>
+                            <span class="text-sm opacity-80 break-all"> — {{ todo.descricao }}</span>
                         </div>
                     </div>
 
@@ -146,7 +146,7 @@
                     this.todos = await response.json();
 
                     //limpa os inputs do formulário
-                    this.newTodo = { nome: "", descricao: "", prioridade: "", realizado: false }
+                    this.newTodo = { nome: "", descricao: "", prioridade: 0, realizado: false }
 
                 } catch (error) {
                     console.error("Erro ao salvar:", error)
@@ -177,16 +177,15 @@
                 }
             },
             getPriorityClass(todo) {
-                
-                if (todo.realizado) {
-                    return 'bg-gray-200 opacity-60'; 
-                }
+                if (todo.realizado) return 'bg-gray-200 opacity-60';
+
+                const p = Number(todo.prioridade);
                 const classes = {
-                    0: 'bg-blue-50',                                      //prioridade baixa azul claro
-                    1: 'bg-yellow-50',                                 //prioridade media amarelo claro
-                    2: 'bg-red-50'                                      //prioridade alta amarelo claro
-                }
-                return classes[todo.prioridade] || 'bg-gray-50'
+                    0: 'bg-blue-50',                                //prioridade baixa fundo azul claro
+                    1: 'bg-yellow-50',                           //prioridade media fundo amarelo claro
+                    2: 'bg-red-50'                               //prioridade alta fundo vermelho claro
+                };
+                return classes[p] || 'bg-gray-50';
             },
             async remove(id) {
                 try {
