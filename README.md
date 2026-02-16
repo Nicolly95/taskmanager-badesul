@@ -1,10 +1,7 @@
 ## TaskManager - Badesul
 Sistema de gestão de tarefas desenvolvido para otimização de fluxos de trabalho, focado em performance e usabilidade.
 
-## 🔗 Links Úteis
-🚀 Deploy Live
-📖 Documentação da API (Swagger - Local)
-  Nota: O link do Swagger só funciona com a aplicação rodando localmente.
+## 🔗 Deploy Live: nicolly-taskmanager.onrender.com
 
 ## 🚀 Tecnologias
 O projeto utiliza as seguintes tecnologias:
