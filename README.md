@@ -1,7 +1,7 @@
 ## TaskManager - Badesul
 Sistema de gestão de tarefas desenvolvido para otimização de fluxos de trabalho, focado em performance e usabilidade.
 
-## 🔗 Deploy Live: nicolly-taskmanager.onrender.com
+## 🔗 [Deploy Live](https://nicolly-taskmanager.onrender.com)
 
 ## 🚀 Tecnologias
 - Backend: Java 17+ com Spring Boot 3.
@@ -39,7 +39,7 @@ Certifique-se de que o MySQL (XAMPP) está ativo.
 
 ## ✨Funcionalidades
 ## 1. Visualização e Gestão Geral:
-Interface principal onde é possível visualizar a lista de tarefas pendentes e concluídas.
+Interface principal onde é possível visualizar a lista de tarefas a ser preenchida.
 ![TaskManager](./screenshots/taskManager.png)
 
 ## 2. Priorização de Tarefas:
