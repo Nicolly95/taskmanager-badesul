@@ -4,7 +4,6 @@ Sistema de gestão de tarefas desenvolvido para otimização de fluxos de trabal
 ## 🔗 Deploy Live: nicolly-taskmanager.onrender.com
 
 ## 🚀 Tecnologias
-O projeto utiliza as seguintes tecnologias:
 - Backend: Java 17+ com Spring Boot 3.
 - Frontend: * Vue.js 3 & Thymeleaf.
 - Estilização: CSS3 / Tailwind CSS.
