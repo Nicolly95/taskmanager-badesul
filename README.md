@@ -1,4 +1,4 @@
-## TaskManager - Badesul
+## TaskManager - JAVA
 Sistema de gestão de tarefas desenvolvido para otimização de fluxos de trabalho, focado em performance e usabilidade.
 
 ## 🔗 [Deploy Live - Render](https://nicolly-taskmanager.onrender.com)
